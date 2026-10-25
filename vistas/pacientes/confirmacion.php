@@ -3,31 +3,39 @@
 declare(strict_types=1);
 
 /**
- * Vista de confirmación de eliminación de un paciente.
+ * Vista de confirmacion de eliminacion de un paciente.
  *
- * Un enlace GET nunca modifica datos: la vista pide una confirmación
- * explícita y el borrado se ejecuta únicamente con una petición POST
- * (reglas VU-01 y VU-02 del estándar de codificación).
+ * Un enlace GET nunca modifica datos: la vista pide una confirmacion
+ * explicita y el borrado se ejecuta unicamente con una peticion POST
+ * (reglas VU-01 y VU-02 del estandar de codificacion).
  */
 
 $urlEstilos = RUTA_ESTILOS;
-$urlListado = RUTA_BASE_URL . 'index.php?accion=listado';
-$urlEliminar = RUTA_BASE_URL . 'index.php?accion=eliminar&id=' . (int) $idPaciente;
+$urlListado = RUTA_BASE_URL . 'index.php?modulo=pacientes&accion=listado';
+$urlEliminar = RUTA_BASE_URL
+    . 'index.php?modulo=pacientes&accion=eliminar&id=' . (int) $idPaciente;
+$urlUsuarios = RUTA_BASE_URL . 'index.php?modulo=usuarios&accion=listado';
+$urlMedicos = RUTA_BASE_URL . 'index.php?modulo=medicos&accion=listado';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Eliminar paciente | Centro médico</title>
-    <!-- Hoja de estilos del proyecto: assets/css/estilos.css -->
+    <title>Eliminar paciente | Centro medico</title>
     <link rel="stylesheet" href="<?= htmlspecialchars($urlEstilos, ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
     <header class="cabecera">
-        <h1>Módulo de pacientes</h1>
-        <p class="subtitulo">Eliminación de paciente</p>
+        <h1>Centro medico</h1>
+        <p class="subtitulo">Eliminacion de paciente</p>
     </header>
+
+    <nav class="navegacion">
+        <a href="<?= htmlspecialchars($urlListado, ENT_QUOTES, 'UTF-8') ?>">Pacientes</a>
+        <a href="<?= htmlspecialchars($urlUsuarios, ENT_QUOTES, 'UTF-8') ?>">Usuarios</a>
+        <a href="<?= htmlspecialchars($urlMedicos, ENT_QUOTES, 'UTF-8') ?>">Medicos</a>
+    </nav>
 
     <main class="contenido">
         <div class="alerta alerta-advertencia" role="alert">
@@ -38,19 +46,19 @@ $urlEliminar = RUTA_BASE_URL . 'index.php?accion=eliminar&id=' . (int) $idPacien
             <caption class="oculto">Datos del paciente que se desea eliminar</caption>
             <tbody>
                 <tr>
-                    <th scope="row">Nombre</th>
-                    <td><?= htmlspecialchars($valores['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
-                </tr>
-                <tr>
-                    <th scope="row">Apellido</th>
-                    <td><?= htmlspecialchars($valores['apellido'], ENT_QUOTES, 'UTF-8') ?></td>
-                </tr>
-                <tr>
-                    <th scope="row">Número de identificación</th>
+                    <th scope="row">Identificacion</th>
                     <td>
-                        <?= htmlspecialchars($valores['numero_identificacion'],
+                        <?= htmlspecialchars($valores['identificacion'],
                                               ENT_QUOTES, 'UTF-8') ?>
                     </td>
+                </tr>
+                <tr>
+                    <th scope="row">Nombres</th>
+                    <td><?= htmlspecialchars($valores['nombres'], ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <th scope="row">Apellidos</th>
+                    <td><?= htmlspecialchars($valores['apellidos'], ENT_QUOTES, 'UTF-8') ?></td>
                 </tr>
             </tbody>
         </table>
@@ -71,7 +79,7 @@ $urlEliminar = RUTA_BASE_URL . 'index.php?accion=eliminar&id=' . (int) $idPacien
     </main>
 
     <footer class="pie">
-        <p>Centro médico &middot; Módulo de pacientes &middot; Evidencia GA7-220501096-AA2-EV01</p>
+        <p>Centro medico &middot; Evidencia GA7-220501096-AA2-EV01</p>
     </footer>
 </body>
 </html>

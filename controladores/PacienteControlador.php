@@ -7,11 +7,11 @@ namespace App\Controladores;
 use App\Modelos\Paciente;
 
 /**
- * Controlador del módulo de pacientes.
+ * Controlador del modulo de pacientes.
  *
- * Traduce la petición HTTP (el parámetro `accion` y los datos del formulario)
- * en llamadas al modelo y presenta el resultado a través de las vistas. La
- * validación de la entrada ocurre en esta capa (regla S-01) y los errores se
+ * Traduce la peticion HTTP (el parametro `accion` y los datos del formulario)
+ * en llamadas al modelo y presenta el resultado a traves de las vistas. La
+ * validacion de la entrada ocurre en esta capa (regla S-01) y los errores se
  * traducen a mensajes comprensibles sin exponer detalles internos (regla S-07).
  */
 final class PacienteControlador
@@ -35,27 +35,22 @@ final class PacienteControlador
      * Campos del formulario de pacientes, en el orden de la tabla.
      */
     private const CAMPOS = [
-        'nombre',
-        'apellido',
-        'numero_identificacion',
+        'identificacion',
+        'nombres',
+        'apellidos',
         'fecha_nacimiento',
-        'genero',
-        'direccion',
-        'telefono',
-        'email',
-        'tipo_sangre',
-        'alergias',
+        'sexo',
     ];
 
     /* ----------------------------------------------------------------- */
-    /* Métodos públicos (reglas M-08 y D-01).                             */
+    /* Metodos publicos (reglas M-08 y D-01).                             */
     /* ----------------------------------------------------------------- */
 
     /**
-     * Enruta la petición hacia la operación solicitada.
+     * Enruta la peticion hacia la operacion solicitada.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function despachar(): void
     {
@@ -101,7 +96,7 @@ final class PacienteControlador
      * Registra un paciente a partir de los datos enviados por el formulario.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function registrar(): void
     {
@@ -111,9 +106,9 @@ final class PacienteControlador
             $valores = $this->leerFormulario();
             $paciente = $this->construirPaciente($valores);
 
-            if (Paciente::existeNumeroIdentificacion($paciente->getNumeroIdentificacion())) {
+            if (Paciente::existeIdentificacion($paciente->getIdentificacion())) {
                 throw new \InvalidArgumentException(
-                    'Ya existe un paciente registrado con ese número de identificación.'
+                    'Ya existe un paciente registrado con ese numero de identificacion.'
                 );
             }
 
@@ -138,10 +133,10 @@ final class PacienteControlador
     }
 
     /**
-     * Presenta el formulario de edición con los datos del paciente.
+     * Presenta el formulario de edicion con los datos del paciente.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function mostrarEdicion(): void
     {
@@ -150,7 +145,7 @@ final class PacienteControlador
         $valores = $this->valoresIniciales();
 
         if ($idPaciente === null) {
-            $this->mostrarListadoConError('No se indicó el paciente que se desea editar.');
+            $this->mostrarListadoConError('No se indico el paciente que se desea editar.');
 
             return;
         }
@@ -179,7 +174,7 @@ final class PacienteControlador
      * Actualiza un paciente a partir de los datos enviados por el formulario.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function actualizar(): void
     {
@@ -191,21 +186,21 @@ final class PacienteControlador
 
             if ($idPaciente === null) {
                 throw new \InvalidArgumentException(
-                    'No se indicó el paciente que se desea actualizar.'
+                    'No se indico el paciente que se desea actualizar.'
                 );
             }
 
             $paciente = $this->construirPaciente($valores);
             $paciente->setIdPaciente($idPaciente);
 
-            $yaExiste = Paciente::existeNumeroIdentificacion(
-                $paciente->getNumeroIdentificacion(),
+            $yaExiste = Paciente::existeIdentificacion(
+                $paciente->getIdentificacion(),
                 $idPaciente
             );
 
             if ($yaExiste) {
                 throw new \InvalidArgumentException(
-                    'Ya existe otro paciente registrado con ese número de identificación.'
+                    'Ya existe otro paciente registrado con ese numero de identificacion.'
                 );
             }
 
@@ -214,7 +209,7 @@ final class PacienteControlador
             }
 
             $mensajeExito = 'Los datos del paciente fueron actualizados correctamente.';
-            $accionRealizada = 'Edición de paciente';
+            $accionRealizada = 'Edicion de paciente';
 
             require RUTA_VISTAS . '/pacientes/exito.php';
         } catch (\InvalidArgumentException $error) {
@@ -242,13 +237,13 @@ final class PacienteControlador
     }
 
     /**
-     * Elimina un paciente, previa confirmación del usuario.
+     * Elimina un paciente, previa confirmacion del usuario.
      *
      * Un enlace GET nunca modifica datos: la primera visita muestra la vista
-     * de confirmación y el borrado sólo se ejecuta cuando la petición es POST.
+     * de confirmacion y el borrado solo se ejecuta cuando la peticion es POST.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function eliminar(): void
     {
@@ -270,7 +265,7 @@ final class PacienteControlador
             }
 
             if (!$this->esSolicitudPost()) {
-                $mensajeConfirmacion = 'Confirme la eliminación del paciente registrado.';
+                $mensajeConfirmacion = 'Confirme la eliminacion del paciente registrado.';
                 $valores = $this->valoresDesdePaciente($paciente);
 
                 require RUTA_VISTAS . '/pacientes/confirmacion.php';
@@ -283,7 +278,7 @@ final class PacienteControlador
             }
 
             $mensajeExito = 'El paciente fue eliminado correctamente.';
-            $accionRealizada = 'Eliminación de paciente';
+            $accionRealizada = 'Eliminacion de paciente';
 
             require RUTA_VISTAS . '/pacientes/exito.php';
         } catch (\InvalidArgumentException $error) {
@@ -300,7 +295,7 @@ final class PacienteControlador
      * Presenta el listado de pacientes registrados.
      *
      * @return void
-     * @throws \PDOException Si la base de datos no está disponible.
+     * @throws \PDOException Si la base de datos no esta disponible.
      */
     public function mostrarListado(): void
     {
@@ -308,13 +303,13 @@ final class PacienteControlador
     }
 
     /* ----------------------------------------------------------------- */
-    /* Métodos privados (regla D-06).                                     */
+    /* Metodos privados (regla D-06).                                     */
     /* ----------------------------------------------------------------- */
 
     /**
      * Presenta el listado de pacientes con un mensaje de error opcional.
      *
-     * @param string|null $mensajeError Mensaje que se mostrará al usuario.
+     * @param string|null $mensajeError Mensaje que se mostrara al usuario.
      * @return void
      */
     private function mostrarListadoConError(?string $mensajeError): void
@@ -332,9 +327,9 @@ final class PacienteControlador
     }
 
     /**
-     * Obtiene la acción solicitada en la URL.
+     * Obtiene la accion solicitada en la URL.
      *
-     * @return string Nombre de la acción o cadena vacía si no se esperaba ninguna.
+     * @return string Nombre de la accion o cadena vacia si no se esperaba ninguna.
      */
     private function obtenerAccion(): string
     {
@@ -346,7 +341,7 @@ final class PacienteControlador
     /**
      * Obtiene el identificador del paciente solicitado.
      *
-     * @return int|null Identificador del paciente o `null` si no es válido.
+     * @return int|null Identificador del paciente o `null` si no es valido.
      */
     private function obtenerIdSolicitado(): ?int
     {
@@ -360,9 +355,9 @@ final class PacienteControlador
     }
 
     /**
-     * Indica si la petición actual se realizó con el método POST.
+     * Indica si la peticion actual se realizo con el metodo POST.
      *
-     * @return bool `true` si la petición es un POST.
+     * @return bool `true` si la peticion es un POST.
      */
     private function esSolicitudPost(): bool
     {
@@ -373,16 +368,13 @@ final class PacienteControlador
      * Lee y sanea los datos del formulario de pacientes.
      *
      * @return array<string, string> Valores del formulario listos para validar.
-     * @throws \InvalidArgumentException Si el correo electrónico no tiene un formato válido.
      */
     private function leerFormulario(): array
     {
         $valores = [];
 
         foreach (self::CAMPOS as $campo) {
-            $valores[$campo] = $campo === 'email'
-                ? (string) ($this->leerCorreo() ?? '')
-                : (string) ($this->leerTexto($campo) ?? '');
+            $valores[$campo] = (string) ($this->leerTexto($campo) ?? '');
         }
 
         return $valores;
@@ -392,7 +384,7 @@ final class PacienteControlador
      * Lee un campo de texto del formulario.
      *
      * @param string $campo Nombre del campo.
-     * @return string|null Texto saneado o `null` si el campo está vacío.
+     * @return string|null Texto saneado o `null` si el campo esta vacio.
      */
     private function leerTexto(string $campo): ?string
     {
@@ -408,44 +400,52 @@ final class PacienteControlador
     }
 
     /**
-     * Lee el correo electrónico del formulario.
-     *
-     * El valor se devuelve tal como llegó cuando no cumple el formato: el
-     * modelo lo rechaza en su modificador `setEmail()`, que es la única fuente
-     * de validación de las reglas del dominio (regla S-04).
-     *
-     * @return string|null Correo electrónico o `null` si el campo está vacío.
-     */
-    private function leerCorreo(): ?string
-    {
-        return self::leerCorreoEntrada(INPUT_POST, 'email');
-    }
-
-    /**
      * Construye el modelo del paciente con los datos del formulario.
      *
      * @param array<string, string> $valores Datos del formulario.
      * @return Paciente Paciente validado por el modelo.
-     * @throws \InvalidArgumentException Si algún dato no cumple las reglas del modelo.
+     * @throws \InvalidArgumentException Si algun dato no cumple las reglas del modelo.
      */
     private function construirPaciente(array $valores): Paciente
     {
+        $fechaNacimiento = $this->construirFecha($valores['fecha_nacimiento']);
+
         return new Paciente(
-            $valores['nombre'],
-            $valores['apellido'],
-            $valores['numero_identificacion'],
-            $valores['fecha_nacimiento'],
-            $valores['genero'],
-            $valores['direccion'],
-            $valores['telefono'],
-            $valores['email'],
-            $valores['tipo_sangre'],
-            $valores['alergias']
+            $valores['identificacion'],
+            $valores['nombres'],
+            $valores['apellidos'],
+            $fechaNacimiento,
+            $valores['sexo']
         );
     }
 
     /**
-     * Devuelve los valores vacíos del formulario.
+     * Construye una fecha a partir de un texto del formulario.
+     *
+     * @param string $texto Texto con la fecha en formato `AAAA-MM-DD`.
+     * @return \DateTimeImmutable|null Fecha valida o `null` si esta vacia.
+     */
+    private function construirFecha(string $texto): ?\DateTimeImmutable
+    {
+        $texto = trim($texto);
+
+        if ($texto === '') {
+            return null;
+        }
+
+        $fecha = \DateTimeImmutable::createFromFormat(Paciente::FORMATO_FECHA, $texto);
+
+        if ($fecha === false || $fecha->format(Paciente::FORMATO_FECHA) !== $texto) {
+            throw new \InvalidArgumentException(
+                'La fecha de nacimiento debe tener el formato AAAA-MM-DD y ser una fecha existente.'
+            );
+        }
+
+        return $fecha;
+    }
+
+    /**
+     * Devuelve los valores vacios del formulario.
      *
      * @return array<string, string> Valores iniciales del formulario.
      */
@@ -469,25 +469,20 @@ final class PacienteControlador
     private function valoresDesdePaciente(Paciente $paciente): array
     {
         return [
-            'nombre' => $paciente->getNombre(),
-            'apellido' => $paciente->getApellido(),
-            'numero_identificacion' => $paciente->getNumeroIdentificacion(),
-            'fecha_nacimiento' => (string) ($paciente->getFechaNacimiento() ?? ''),
-            'genero' => (string) ($paciente->getGenero() ?? ''),
-            'direccion' => (string) ($paciente->getDireccion() ?? ''),
-            'telefono' => (string) ($paciente->getTelefono() ?? ''),
-            'email' => (string) ($paciente->getEmail() ?? ''),
-            'tipo_sangre' => (string) ($paciente->getTipoSangre() ?? ''),
-            'alergias' => (string) ($paciente->getAlergias() ?? ''),
+            'identificacion' => $paciente->getIdentificacion(),
+            'nombres' => $paciente->getNombres(),
+            'apellidos' => $paciente->getApellidos(),
+            'fecha_nacimiento' => $paciente->getFechaNacimiento()?->format(Paciente::FORMATO_FECHA) ?? '',
+            'sexo' => (string) ($paciente->getSexo() ?? ''),
         ];
     }
 
     /**
      * Lee un campo de texto de la entrada del navegador.
      *
-     * `FILTER_SANITIZE_STRING` está obsoleto desde PHP 8.1 y su uso genera un
-     * aviso `E_DEPRECATED`. El aviso se silencia únicamente durante la
-     * lectura, porque el constante se resuelve al ejecutarse la instrucción;
+     * `FILTER_SANITIZE_STRING` esta obsoleto desde PHP 8.1 y su uso genera un
+     * aviso `E_DEPRECATED`. El aviso se silencia unicamente durante la
+     * lectura, porque el constante se resuelve al ejecutarse la instruccion;
      * de este modo la respuesta al usuario no se mezcla con avisos del
      * lenguaje.
      *
@@ -514,7 +509,7 @@ final class PacienteControlador
      *
      * @param int $tipoEntrada Tipo de entrada (`INPUT_GET` o `INPUT_POST`).
      * @param string $campo Nombre del campo a leer.
-     * @return int|null Entero leído o `null` si el campo no existe o no es válido.
+     * @return int|null Entero leido o `null` si el campo no existe o no es valido.
      */
     private static function leerEnteroEntrada(int $tipoEntrada, string $campo): ?int
     {
@@ -524,36 +519,16 @@ final class PacienteControlador
     }
 
     /**
-     * Lee el campo de correo electrónico de la entrada del navegador.
-     *
-     * @param int $tipoEntrada Tipo de entrada (`INPUT_GET` o `INPUT_POST`).
-     * @param string $campo Nombre del campo a leer.
-     * @return string|null Correo electrónico o `null` si el campo está vacío.
-     */
-    private static function leerCorreoEntrada(int $tipoEntrada, string $campo): ?string
-    {
-        $saneado = filter_input($tipoEntrada, $campo, FILTER_SANITIZE_EMAIL);
-
-        if (!is_string($saneado) || trim($saneado) === '') {
-            return null;
-        }
-
-        $validado = filter_input($tipoEntrada, $campo, FILTER_VALIDATE_EMAIL);
-
-        return is_string($validado) ? trim($validado) : trim($saneado);
-    }
-
-    /**
      * Registra el detalle de un error sin mostrarlo al usuario.
      *
-     * @param string $operacion Operación que generó el error.
+     * @param string $operacion Operacion que genero el error.
      * @param \Throwable $error Error capturado.
      * @return void
      */
     private function registrarError(string $operacion, \Throwable $error): void
     {
         error_log(sprintf(
-            '[pacientes] operación=%s error=%s mensaje=%s',
+            '[pacientes] operacion=%s error=%s mensaje=%s',
             $operacion,
             $error::class,
             $error->getMessage()

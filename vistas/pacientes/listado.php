@@ -6,15 +6,17 @@ declare(strict_types=1);
  * Vista del listado de pacientes.
  *
  * Presenta una fila por cada paciente registrado. Todos los valores se
- * escapan antes de imprimirse (regla SE-03) y las operaciones de edición y
- * eliminación apuntan al controlador (regla VU-02).
+ * escapan antes de imprimirse (regla SE-03) y las operaciones de edicion y
+ * eliminacion apuntan al controlador (regla VU-02).
  */
 
 $urlEstilos = RUTA_ESTILOS;
-$urlListado = RUTA_BASE_URL . 'index.php?accion=listado';
-$urlRegistro = RUTA_BASE_URL . 'index.php?accion=registro';
+$urlListado = RUTA_BASE_URL . 'index.php?modulo=pacientes&accion=listado';
+$urlRegistro = RUTA_BASE_URL . 'index.php?modulo=pacientes&accion=registro';
+$urlUsuarios = RUTA_BASE_URL . 'index.php?modulo=usuarios&accion=listado';
+$urlMedicos = RUTA_BASE_URL . 'index.php?modulo=medicos&accion=listado';
 
-$etiquetasGenero = [
+$etiquetasSexo = [
     'M' => 'Masculino',
     'F' => 'Femenino',
     'O' => 'Otro',
@@ -25,15 +27,20 @@ $etiquetasGenero = [
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Listado de pacientes | Centro médico</title>
-    <!-- Hoja de estilos del proyecto: assets/css/estilos.css -->
+    <title>Listado de pacientes | Centro medico</title>
     <link rel="stylesheet" href="<?= htmlspecialchars($urlEstilos, ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
     <header class="cabecera">
-        <h1>Módulo de pacientes</h1>
+        <h1>Centro medico</h1>
         <p class="subtitulo">Listado de pacientes</p>
     </header>
+
+    <nav class="navegacion">
+        <a href="<?= htmlspecialchars($urlListado, ENT_QUOTES, 'UTF-8') ?>">Pacientes</a>
+        <a href="<?= htmlspecialchars($urlUsuarios, ENT_QUOTES, 'UTF-8') ?>">Usuarios</a>
+        <a href="<?= htmlspecialchars($urlMedicos, ENT_QUOTES, 'UTF-8') ?>">Medicos</a>
+    </nav>
 
     <main class="contenido">
         <?php if ($mensajeError !== null) : ?>
@@ -53,30 +60,29 @@ $etiquetasGenero = [
         </div>
 
         <?php if (count($filas) === 0) : ?>
-            <p class="vacio">Todavía no hay pacientes registrados en la base de datos.</p>
+            <p class="vacio">Todavia no hay pacientes registrados en la base de datos.</p>
         <?php else : ?>
             <table class="tabla">
-                <caption class="oculto">Pacientes registrados en el centro médico</caption>
+                <caption class="oculto">Pacientes registrados en el centro medico</caption>
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido</th>
-                        <th scope="col">Identificación</th>
+                        <th scope="col">Identificacion</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col">Apellidos</th>
                         <th scope="col">Fecha de nacimiento</th>
-                        <th scope="col">Género</th>
-                        <th scope="col">Teléfono</th>
-                        <th scope="col">Correo electrónico</th>
+                        <th scope="col">Sexo</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($filas as $fila) : ?>
                         <?php
-                        $idPaciente = (int) $fila['id_paciente'];
-                        $urlEdicion = RUTA_BASE_URL . 'index.php?accion=edicion&id=' . $idPaciente;
+                        $idPaciente = (int) $fila['idPaciente'];
+                        $urlEdicion = RUTA_BASE_URL
+                            . 'index.php?modulo=pacientes&accion=edicion&id=' . $idPaciente;
                         $urlEliminar = RUTA_BASE_URL
-                            . 'index.php?accion=eliminar&id=' . $idPaciente;
+                            . 'index.php?modulo=pacientes&accion=eliminar&id=' . $idPaciente;
                         ?>
                         <tr>
                             <td>
@@ -84,36 +90,28 @@ $etiquetasGenero = [
                                                       ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars((string) $fila['nombre'],
+                                <?= htmlspecialchars((string) $fila['pacIdentificacion'],
                                                       ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars((string) $fila['apellido'],
+                                <?= htmlspecialchars((string) $fila['pacNombres'],
                                                       ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars((string) $fila['numero_identificacion'],
+                                <?= htmlspecialchars((string) $fila['pacApellidos'],
                                                       ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars((string) ($fila['fecha_nacimiento'] ?? ''),
+                                <?= htmlspecialchars((string) ($fila['pacFechaNacimiento'] ?? ''),
                                                       ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td>
                                 <?= htmlspecialchars(
-                                    $etiquetasGenero[(string) ($fila['genero'] ?? '')]
+                                    $etiquetasSexo[(string) ($fila['pacSexo'] ?? '')]
                                         ?? 'Sin especificar',
                                     ENT_QUOTES,
                                     'UTF-8'
                                 ) ?>
-                            </td>
-                            <td>
-                                <?= htmlspecialchars((string) ($fila['telefono'] ?? ''),
-                                                      ENT_QUOTES, 'UTF-8') ?>
-                            </td>
-                            <td>
-                                <?= htmlspecialchars((string) ($fila['email'] ?? ''),
-                                                      ENT_QUOTES, 'UTF-8') ?>
                             </td>
                             <td class="acciones-fila">
                                 <a href="<?= htmlspecialchars($urlEdicion, ENT_QUOTES, 'UTF-8') ?>">
@@ -121,7 +119,7 @@ $etiquetasGenero = [
                                 </a>
                                 <a class="enlace-peligro"
                                    href="<?= htmlspecialchars($urlEliminar,
-                                                      ENT_QUOTES, 'UTF-8') ?>">
+                                                       ENT_QUOTES, 'UTF-8') ?>">
                                     Eliminar
                                 </a>
                             </td>
@@ -133,7 +131,7 @@ $etiquetasGenero = [
     </main>
 
     <footer class="pie">
-        <p>Centro médico &middot; Módulo de pacientes &middot; Evidencia GA7-220501096-AA2-EV01</p>
+        <p>Centro medico &middot; Evidencia GA7-220501096-AA2-EV01</p>
     </footer>
 </body>
 </html>
