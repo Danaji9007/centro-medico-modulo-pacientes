@@ -1,0 +1,283 @@
+/*
+ * Hoja de estilos del módulo de pacientes.
+ *
+ * CSS propio, mínimo y legible: no depende de frameworks externos ni de
+ * recursos de terceros, para que el módulo funcione sin conexión.
+ */
+
+:root {
+    --color-fondo: #f4f6f8;
+    --color-superficie: #ffffff;
+    --color-texto: #1f2933;
+    --color-texto-suave: #52606d;
+    --color-primario: #1a6f4b;
+    --color-primario-oscuro: #14563a;
+    --color-error: #b3261e;
+    --color-error-fondo: #fdecea;
+    --color-exito: #1a6f4b;
+    --color-exito-fondo: #e7f4ec;
+    --color-advertencia: #8a5a00;
+    --color-advertencia-fondo: #fdf3e2;
+    --color-borde: #d9dee3;
+    --radio: 6px;
+    --ancho-maximo: 960px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.cabecera {
+    background-color: var(--color-primario);
+    color: #ffffff;
+    padding: 1.25rem 1rem;
+    text-align: center;
+}
+
+.cabecera h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.subtitulo {
+    margin: 0.25rem 0 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.contenido {
+    max-width: var(--ancho-maximo);
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
+
+.pie {
+    max-width: var(--ancho-maximo);
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    color: var(--color-texto-suave);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Formularios ------------------------------------------------------------ */
+
+.formulario {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 1.25rem;
+}
+
+fieldset {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    margin: 0 0 1.25rem;
+    padding: 1rem;
+}
+
+legend {
+    font-weight: 700;
+    padding: 0 0.4rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.9rem;
+}
+
+.campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: var(--color-primario);
+    outline: 2px solid rgba(26, 111, 75, 0.2);
+}
+
+/* Tablas ----------------------------------------------------------------- */
+
+.tabla {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-collapse: collapse;
+    border-radius: var(--radio);
+    width: 100%;
+}
+
+.tabla th,
+.tabla td {
+    border-bottom: 1px solid var(--color-borde);
+    padding: 0.6rem 0.7rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tabla thead th {
+    background-color: #eef1f4;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.tabla tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-detalle {
+    margin-bottom: 1.25rem;
+    max-width: 32rem;
+}
+
+.oculto {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+/* Acciones y botones ---------------------------------------------------- */
+
+.acciones,
+.barra-acciones {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+}
+
+.barra-acciones {
+    justify-content: space-between;
+}
+
+.contador {
+    color: var(--color-texto-suave);
+    font-size: 0.9rem;
+}
+
+.boton {
+    border: 1px solid transparent;
+    border-radius: var(--radio);
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.55rem 1rem;
+    text-decoration: none;
+}
+
+.boton-primario {
+    background-color: var(--color-primario);
+    color: #ffffff;
+}
+
+.boton-primario:hover {
+    background-color: var(--color-primario-oscuro);
+}
+
+.boton-secundario {
+    background-color: transparent;
+    border-color: var(--color-borde);
+    color: var(--color-texto);
+}
+
+.boton-secundario:hover {
+    background-color: #eef1f4;
+}
+
+.boton-peligro {
+    background-color: var(--color-error);
+    color: #ffffff;
+}
+
+.boton-peligro:hover {
+    background-color: #8f1e17;
+}
+
+.acciones-fila a {
+    color: var(--color-primario);
+    font-weight: 600;
+    margin-right: 0.75rem;
+}
+
+.enlace-peligro {
+    color: var(--color-error);
+}
+
+/* Alertas y estados vacíos ---------------------------------------------- */
+
+.alerta {
+    border: 1px solid transparent;
+    border-radius: var(--radio);
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+}
+
+.alerta-error {
+    background-color: var(--color-error-fondo);
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+.alerta-exito {
+    background-color: var(--color-exito-fondo);
+    border-color: var(--color-exito);
+    color: var(--color-exito);
+}
+
+.alerta-advertencia {
+    background-color: var(--color-advertencia-fondo);
+    border-color: var(--color-advertencia);
+    color: var(--color-advertencia);
+}
+
+.vacio {
+    background-color: var(--color-superficie);
+    border: 1px dashed var(--color-borde);
+    border-radius: var(--radio);
+    color: var(--color-texto-suave);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .campo {
+        margin-bottom: 0.75rem;
+    }
+
+    .tabla {
+        display: block;
+        overflow-x: auto;
+    }
+}
