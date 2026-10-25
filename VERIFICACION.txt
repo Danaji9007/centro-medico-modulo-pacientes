@@ -1,0 +1,129 @@
+================================================================================
+VERIFICACION - MODULOS DE PACIENTES, USUARIOS Y MEDICOS DEL CENTRO MEDICO
+Evidencia: GA7-220501096-AA2-EV01 - Codificacion y pruebas del proyecto
+Fecha de ejecucion: 2026-10-25
+Entorno: PHP 8.2.12 (XAMPP) | MariaDB 10.4.32 | PDO con consultas parametrizadas
+Base de datos: centromedico | Tablas: roles, usuarios, pacientes, medicos
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. VERSION DE PHP
+--------------------------------------------------------------------------------
+PHP 8.2.12 (cli) (built: Oct 24 2023 21:15:15) (ZTS Visual C++ 2019 x64)
+Copyright (c) The PHP Group
+Zend Engine v4.2.12, Copyright (c) Zend Technologies
+
+--------------------------------------------------------------------------------
+2. VALIDACION DE SINTAXIS (php -l) - 23 archivos
+--------------------------------------------------------------------------------
+OK: config/config.php
+OK: controladores/MedicoControlador.php
+OK: controladores/PacienteControlador.php
+OK: controladores/UsuarioControlador.php
+OK: infraestructura/BaseDeDatos.php
+OK: modelos/Medico.php
+OK: modelos/Paciente.php
+OK: modelos/Usuario.php
+OK: public/estilos.php
+OK: public/index.php
+OK: vistas/medicos/confirmacion.php
+OK: vistas/medicos/edicion.php
+OK: vistas/medicos/exito.php
+OK: vistas/medicos/listado.php
+OK: vistas/medicos/registro.php
+OK: vistas/pacientes/confirmacion.php
+OK: vistas/pacientes/edicion.php
+OK: vistas/pacientes/exito.php
+OK: vistas/pacientes/listado.php
+OK: vistas/pacientes/registro.php
+OK: vistas/usuarios/confirmacion.php
+OK: vistas/usuarios/edicion.php
+OK: vistas/usuarios/exito.php
+OK: vistas/usuarios/listado.php
+OK: vistas/usuarios/registro.php
+
+Resultado: 25 archivos PHP verificados, 0 errores de sintaxis.
+
+--------------------------------------------------------------------------------
+3. CONFIGURACION Y BASE DE DATOS
+--------------------------------------------------------------------------------
+- Archivo .env creado a partir de .env.example.
+- config/config.php lee credenciales desde .env mediante define().
+- Script database/centromedico.sql ejecutado correctamente.
+- Base de datos centromedico creada con tablas: roles, usuarios, pacientes, medicos.
+
+--------------------------------------------------------------------------------
+4. SERVIDOR INTEGRADO DE PHP
+--------------------------------------------------------------------------------
+Comando: C:\xampp\php\php.exe -S 127.0.0.1:8080 -t public
+(directorio de trabajo: centro_medico)
+
+--------------------------------------------------------------------------------
+5. PRUEBA FUNCIONAL MANUAL DE LOS TRES CRUD
+--------------------------------------------------------------------------------
+
+--- 5.1 Modulo Pacientes ---
+GET  /index.php?modulo=pacientes&accion=listado   -> HTTP 200, listado vacio
+GET  /index.php?modulo=pacientes&accion=registro  -> HTTP 200, formulario visible
+POST /index.php?modulo=pacientes&accion=registrar -> HTTP 200, mensaje de exito
+Registro insertado: idPaciente=1, CC-101010, Ana Restrepo
+
+--- 5.2 Modulo Usuarios ---
+GET  /index.php?modulo=usuarios&accion=listado    -> HTTP 200, listado vacio
+GET  /index.php?modulo=usuarios&accion=registro   -> HTTP 200, formulario visible
+POST /index.php?modulo=usuarios&accion=registrar  -> HTTP 200, mensaje de exito
+Registro insertado: idUsuario=1, admin, Activo, Administrador
+
+--- 5.3 Modulo Medicos ---
+GET  /index.php?modulo=medicos&accion=listado     -> HTTP 200, listado vacio
+GET  /index.php?modulo=medicos&accion=registro    -> HTTP 200, formulario visible
+POST /index.php?modulo=medicos&accion=registrar   -> HTTP 200, mensaje de exito
+Registro insertado: idMedico=1, MD-202020, Carlos Vargas, Cardiologia
+
+--------------------------------------------------------------------------------
+6. PRUEBAS DE EDICION Y ELIMINACION
+--------------------------------------------------------------------------------
+Se ejecutaron pruebas automatizadas de CRUD completo sobre los tres modulos.
+
+--- 6.1 Modulo Pacientes ---
+GET  /index.php?modulo=pacientes&accion=edicion&id=1   -> HTTP 200, formulario prellenado
+POST /index.php?modulo=pacientes&accion=actualizar     -> HTTP 200, mensaje de exito
+GET  /index.php?modulo=pacientes&accion=eliminar&id=1  -> HTTP 200, confirmacion visible
+POST /index.php?modulo=pacientes&accion=eliminar&id=1  -> HTTP 200, registro eliminado
+
+--- 6.2 Modulo Usuarios ---
+GET  /index.php?modulo=usuarios&accion=edicion&id=1    -> HTTP 200, formulario prellenado
+POST /index.php?modulo=usuarios&accion=actualizar      -> HTTP 200, mensaje de exito
+GET  /index.php?modulo=usuarios&accion=eliminar&id=1   -> HTTP 200, confirmacion visible
+POST /index.php?modulo=usuarios&accion=eliminar&id=1   -> HTTP 200, registro eliminado
+
+--- 6.3 Modulo Medicos ---
+GET  /index.php?modulo=medicos&accion=edicion&id=1     -> HTTP 200, formulario prellenado
+POST /index.php?modulo=medicos&accion=actualizar       -> HTTP 200, mensaje de exito
+GET  /index.php?modulo=medicos&accion=eliminar&id=1    -> HTTP 200, confirmacion visible
+POST /index.php?modulo=medicos&accion=eliminar&id=1    -> HTTP 200, registro eliminado
+
+Resumen: 3/3 modulos con CRUD completo probado (alta, listado, edicion, eliminacion).
+
+--------------------------------------------------------------------------------
+7. ESTADO FINAL DE LAS TABLAS
+--------------------------------------------------------------------------------
+Tabla centromedico.pacientes: 0 fila(s)
+Tabla centromedico.usuarios:  0 fila(s)
+Tabla centromedico.medicos:   0 fila(s)
+
+--------------------------------------------------------------------------------
+8. OBSERVACIONES Y PENDIENTES
+--------------------------------------------------------------------------------
+- El hash de la contrasena se almacena correctamente con password_hash().
+- Las consultas SQL usan PDO con prepare/execute y parametros vinculados.
+- Las vistas escapan la salida con htmlspecialchars().
+- Se agrego menu de navegacion entre los tres modulos.
+- No se implementaron pruebas automatizadas adicionales ni autenticacion de
+  sesion; queda fuera del alcance de esta sesion.
+
+================================================================================
+RESULTADO: Tres modulos funcionales (pacientes, usuarios, medicos) con CRUD
+completo probado, credenciales externas en .env y sin errores de sintaxis.
+================================================================================
