@@ -271,6 +271,38 @@ legend {
     text-align: center;
 }
 
+/* Navegacion entre modulos --------------------------------------------- */
+
+.navegacion {
+    background-color: var(--color-superficie);
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.navegacion a {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    color: var(--color-texto);
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    text-decoration: none;
+}
+
+.navegacion a:hover {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+    color: #ffffff;
+}
+
+.campo small {
+    color: var(--color-texto-suave);
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+}
+
 @media (max-width: 640px) {
     .campo {
         margin-bottom: 0.75rem;
@@ -279,5 +311,9 @@ legend {
     .tabla {
         display: block;
         overflow-x: auto;
+    }
+
+    .navegacion {
+        flex-wrap: wrap;
     }
 }

@@ -64,7 +64,7 @@ $roles = ['Administrador', 'Medico', 'Recepcionista', 'Paciente'];
                 <div class="campo">
                     <label for="password">Contrasena *</label>
                     <input type="password" id="password" name="password" minlength="6" required>
-                    <small>Deje la contrasena actual si no desea cambiarla.</small>
+                    <small>En la edicion se debe ingresar y re-cifrar la contrasena.</small>
                 </div>
 
                 <div class="campo">
